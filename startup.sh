@@ -5,5 +5,3 @@
 cp /home/site/default /etc/nginx/sites-enabled/default 
 
 service nginx restart
-
-php artisan key:generate
