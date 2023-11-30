@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class User extends Model
+class User extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     protected $table = 'users';
 
     protected $fillable = [
@@ -16,11 +20,18 @@ class User extends Model
         'can_create_loads',
         'username',
         'password',
-        'company'
+        'company',
+        'role'
     ];
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'user');
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+
+
+    public function withAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
     }
 }

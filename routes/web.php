@@ -65,3 +65,6 @@ Route::post('/insert', [LoadController::class, 'insertLoadH']);
 Route::put('/edit/load/{loadNumber}', [LoadController::class, 'editLoadH']);
 Route::get('/get/load/{loadNumber}', [LoadController::class, 'getLoadH']);
 Route::get('/getloads', [LoadController::class, 'getAllLoadsH']);
+
+
+Route::post('login', 'AuthController@login');
