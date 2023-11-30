@@ -63,4 +63,4 @@ jobs:
           app-name: 'customer-portal-er'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3F42D25AF3094E74A677D475CFE54144 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1E5EABEA29FC4050A2245350E251941E }}
