@@ -6,18 +6,22 @@ use App\Http\Controllers\LoadController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AuthController;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::post('login', [AuthController::class, 'login']);
+Route::get('/loads', [LoadController::class, 'index']);
+
 Route::get('/users', [UsersController::class, 'getUsers']);
 Route::get('/api/comments/all', [CommentController::class, 'getCommentsAll']);
 
 Route::get('/portalhome', [HomeController::class, 'index']);
 
-Route::get('/loads', [LoadController::class, 'index']);
 Route::get('/api/loads', [LoadController::class, 'getLoads']);
 
 Route::get('/load/{loadNumber}', [LoadController::class, 'indexLoadDetails']);
@@ -25,7 +29,6 @@ Route::get('/api/loads/load/{loadNumber}', [LoadController::class, 'getLoadDetai
 Route::get('/api/invoices/load/{loadNumber}', [InvoiceController::class, 'getInvoicesByLoad']);
 
 
-Route::get('/invoices', [InvoiceController::class, 'index']);
 Route::get('/api/invoices', [InvoiceController::class, 'getInvoices']);
 Route::post('/api/invoices/create', [InvoiceController::class, 'createInvoice']);
 
@@ -66,5 +69,5 @@ Route::put('/edit/load/{loadNumber}', [LoadController::class, 'editLoadH']);
 Route::get('/get/load/{loadNumber}', [LoadController::class, 'getLoadH']);
 Route::get('/getloads', [LoadController::class, 'getAllLoadsH']);
 
-
-Route::post('login', 'AuthController@login');
+//Route::middleware('auth:api')->group(function () {
+//});

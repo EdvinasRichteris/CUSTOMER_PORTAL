@@ -12,7 +12,15 @@ import InvoiceListLoadDetails from './InvoiceListLoadDetails.vue';
 import InvoiceDetails from './InvoiceDetails.vue';
 import CommentDetails from './CommentDetails.vue';
 
-
+axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, function (error) {
+    return Promise.reject(error);
+});
 app.component('portal-home', Home);
 app.component('load-list', LoadList);
 app.component('invoice-list', InvoiceList);

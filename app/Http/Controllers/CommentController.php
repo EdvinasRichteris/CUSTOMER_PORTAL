@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Load;
@@ -78,91 +80,210 @@ class CommentController extends Controller
     }
 
     //Hierarchical
-    public function deleteCommentH($loadNumber, $invoiceNumber, $commentId)
+    public function deleteCommentH(Request $request, $loadNumber, $invoiceNumber, $commentId)
     {
+        $bearerToken = $request->bearerToken();
 
-        $comment = Comment::with('invoice.loadRelation')->find($commentId);
-
-        if (
-            $comment &&
-            $comment->invoice &&
-            $comment->invoice->invoice_number == $invoiceNumber &&
-            $comment->invoice->loadRelation &&
-            $comment->invoice->loadRelation->load_number == $loadNumber
-        ) {
-            $comment->delete();
-            return response()->json(['message' => 'Comment deleted successfully']);
+        if (!$bearerToken) {
+            return response()->json(['error' => 'Token not provided'], 401);
         }
 
-        return response()->json(['message' => 'Comment not found'], 400);
+        $tokenParts = explode(".", $bearerToken);
+
+        $payload = json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', $tokenParts[1]))), true);
+
+        if (!$payload || !isset($payload['jti'])) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        }
+
+        $jti = $payload['jti'];
+
+        $tokenRecord = DB::table('oauth_access_tokens')
+            ->where('id', $jti)
+            ->first();
+
+        if ($tokenRecord && !$tokenRecord->revoked && Carbon::parse($tokenRecord->expires_at)->isFuture()) {
+            $comment = Comment::with('invoice.loadRelation')->find($commentId);
+
+            if (
+                $comment &&
+                $comment->invoice &&
+                $comment->invoice->invoice_number == $invoiceNumber &&
+                $comment->invoice->loadRelation &&
+                $comment->invoice->loadRelation->load_number == $loadNumber
+            ) {
+                $comment->delete();
+                return response()->json(['message' => 'Comment deleted successfully']);
+            }
+
+            return response()->json(['message' => 'Comment not found'], 400);
+        } else {
+            return response()->json(['error' => 'Invalid or expired token'], 401);
+        }
     }
 
 
     public function insertCommentH(Request $request, $loadNumber, $invoiceNumber)
     {
-        $validated = $request->validate([
-            'comment_text' => 'required|string|max:255',
-        ]);
+        $bearerToken = $request->bearerToken();
 
-        $load = Load::where('load_number', $loadNumber)->first();
-        if (!$load) {
-            return response()->json(['message' => 'Load not found'], 400);
+        if (!$bearerToken) {
+            return response()->json(['error' => 'Token not provided'], 401);
         }
 
-        $invoice = Invoice::where('invoice_number', $invoiceNumber)->where('load_number', $load->load_number)->first();
-        if (!$invoice) {
-            return response()->json(['message' => 'Invoice not found'], 400);
+        $tokenParts = explode(".", $bearerToken);
+
+        $payload = json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', $tokenParts[1]))), true);
+
+        if (!$payload || !isset($payload['jti'])) {
+            return response()->json(['error' => 'Invalid token'], 401);
         }
 
-        $comment = new Comment;
-        $comment->comment = $validated['comment_text'];
-        $comment->invoice_number = $invoice->invoice_number;
-        $comment->user = '1';
-        $comment->save();
+        $jti = $payload['jti'];
 
-        return response()->json(['message' => 'Comment added successfully', 'comment' => $comment]);
+        $tokenRecord = DB::table('oauth_access_tokens')
+            ->where('id', $jti)
+            ->first();
+
+        if ($tokenRecord && !$tokenRecord->revoked && Carbon::parse($tokenRecord->expires_at)->isFuture()) {
+            $validated = $request->validate([
+                'comment_text' => 'required|string|max:255',
+            ]);
+
+            $load = Load::where('load_number', $loadNumber)->first();
+            if (!$load) {
+                return response()->json(['message' => 'Load not found'], 400);
+            }
+
+            $invoice = Invoice::where('invoice_number', $invoiceNumber)->where('load_number', $load->load_number)->first();
+            if (!$invoice) {
+                return response()->json(['message' => 'Invoice not found'], 400);
+            }
+
+            $comment = new Comment;
+            $comment->comment = $validated['comment_text'];
+            $comment->invoice_number = $invoice->invoice_number;
+            $comment->user = '1';
+            $comment->save();
+
+            return response()->json(['message' => 'Comment added successfully', 'comment' => $comment]);
+        } else {
+            return response()->json(['error' => 'Invalid or expired token'], 401);
+        }
     }
 
     public function editCommentH(Request $request, $loadNumber, $invoiceNumber, $commentId)
     {
-        $validated = $request->validate([
-            'comment_text' => 'required|string|max:255',
-        ]);
+        $bearerToken = $request->bearerToken();
 
-        $comment = Comment::with('invoice.loadRelation')
-            ->where('id', $commentId)
-            ->first();
-
-        if (!$comment) {
-            return response()->json(['message' => 'Comment not found'], 400);
+        if (!$bearerToken) {
+            return response()->json(['error' => 'Token not provided'], 401);
         }
 
-        $comment->comment = $validated['comment_text'];
-        $comment->save();
-        return response()->json(['message' => 'Comment updated successfully', 'comment' => $comment]);
-    }
+        $tokenParts = explode(".", $bearerToken);
 
-    public function getCommentH($loadNumber, $invoiceNumber, $commentId)
-    {
-        $comment = Comment::with('invoice.loadRelation')
-            ->where('id', $commentId)
-            ->first();
+        $payload = json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', $tokenParts[1]))), true);
 
-        if (!$comment) {
-            return response()->json(['message' => 'Comment not found'], 404);
+        if (!$payload || !isset($payload['jti'])) {
+            return response()->json(['error' => 'Invalid token'], 401);
         }
 
-        return response()->json(['message' => 'Comment retrieved successfully', 'comment' => $comment]);
+        $jti = $payload['jti'];
+
+        $tokenRecord = DB::table('oauth_access_tokens')
+            ->where('id', $jti)
+            ->first();
+
+        if ($tokenRecord && !$tokenRecord->revoked && Carbon::parse($tokenRecord->expires_at)->isFuture()) {
+            $validated = $request->validate([
+                'comment_text' => 'required|string|max:255',
+            ]);
+
+            $comment = Comment::with('invoice.loadRelation')
+                ->where('id', $commentId)
+                ->first();
+
+            if (!$comment) {
+                return response()->json(['message' => 'Comment not found'], 400);
+            }
+
+            $comment->comment = $validated['comment_text'];
+            $comment->save();
+            return response()->json(['message' => 'Comment updated successfully', 'comment' => $comment]);
+        } else {
+            return response()->json(['error' => 'Invalid or expired token'], 401);
+        }
     }
 
-    public function getAllCommentsH($loadNumber, $invoiceNumber)
+    public function getCommentH(Request $request, $loadNumber, $invoiceNumber, $commentId)
     {
-        $comments = Comment::with('invoice.loadRelation')
-            ->whereHas('invoice', function ($query) use ($loadNumber, $invoiceNumber) {
-                $query->where('load_number', $loadNumber)->where('invoice_number', $invoiceNumber);
-            })
-            ->get();
+        $bearerToken = $request->bearerToken();
 
-        return response()->json(['message' => 'Comments retrieved successfully', 'comments' => $comments]);
+        if (!$bearerToken) {
+            return response()->json(['error' => 'Token not provided'], 401);
+        }
+
+        $tokenParts = explode(".", $bearerToken);
+
+        $payload = json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', $tokenParts[1]))), true);
+
+        if (!$payload || !isset($payload['jti'])) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        }
+
+        $jti = $payload['jti'];
+
+        $tokenRecord = DB::table('oauth_access_tokens')
+            ->where('id', $jti)
+            ->first();
+
+        if ($tokenRecord && !$tokenRecord->revoked && Carbon::parse($tokenRecord->expires_at)->isFuture()) {
+            $comment = Comment::with('invoice.loadRelation')
+                ->where('id', $commentId)
+                ->first();
+
+            if (!$comment) {
+                return response()->json(['message' => 'Comment not found'], 404);
+            }
+
+            return response()->json(['message' => 'Comment retrieved successfully', 'comment' => $comment]);
+        } else {
+            return response()->json(['error' => 'Invalid or expired token'], 401);
+        }
+    }
+
+    public function getAllCommentsH(Request $request, $loadNumber, $invoiceNumber)
+    {
+        $bearerToken = $request->bearerToken();
+
+        if (!$bearerToken) {
+            return response()->json(['error' => 'Token not provided'], 401);
+        }
+
+        $tokenParts = explode(".", $bearerToken);
+
+        $payload = json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', $tokenParts[1]))), true);
+
+        if (!$payload || !isset($payload['jti'])) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        }
+
+        $jti = $payload['jti'];
+
+        $tokenRecord = DB::table('oauth_access_tokens')
+            ->where('id', $jti)
+            ->first();
+
+        if ($tokenRecord && !$tokenRecord->revoked && Carbon::parse($tokenRecord->expires_at)->isFuture()) {
+            $comments = Comment::with('invoice.loadRelation')
+                ->whereHas('invoice', function ($query) use ($loadNumber, $invoiceNumber) {
+                    $query->where('load_number', $loadNumber)->where('invoice_number', $invoiceNumber);
+                })
+                ->get();
+
+            return response()->json(['message' => 'Comments retrieved successfully', 'comments' => $comments]);
+        } else {
+            return response()->json(['error' => 'Invalid or expired token'], 401);
+        }
     }
 }

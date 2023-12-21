@@ -127,47 +127,41 @@
         }
     
         function handleLogin() {
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
 
-        fetch('/oauth/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                grant_type: 'password',
-                client_id: '3',
-                client_secret: 'MQAciS7nIkv8Xe5PxJcE5DcZBFrTnsxAWNkSOgny',
-                username: username,
-                password: password,
-                scope: ''
-            })
+    fetch('/oauth/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            grant_type: 'password',
+            client_id: '2',
+            client_secret: 'BlEAfbe6X3RL63xnkvKGztRcJZ7o8gh93vnGBVNd',
+            username: username,
+            password: password,
+            scope: ''
         })
-        .then(response => {
-            console.log(response.ok);
-            if (response.ok) {
-                return response.json();
-            } else {
-                return response.json().then(json => {
-                    throw new Error(json.error_description || 'Login failed');
-                });
-            }
-        })
-        .then(data => {
-            if (data.access_token) {
-                window.location.href = '/loads';
-            } else {
-                throw new Error('Login failed: Invalid server response.');
-            }
-        })
-        .catch(error => {
-            const errorDiv = document.getElementById('login-error');
-            errorDiv.textContent = error.message;
-            errorDiv.style.display = 'block';
-        });
-    }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.access_token) {
+
+            localStorage.setItem('access_token', data.access_token);
+            
+            window.location.href = '/loads';
+        } else {
+            throw new Error('Login failed: Invalid credentials.');
+        }
+    })
+    .catch(error => {
+        const errorDiv = document.getElementById('login-error');
+        errorDiv.textContent = error.message;
+        errorDiv.style.display = 'block';
+    });
+}
 </script>
 
 </body>

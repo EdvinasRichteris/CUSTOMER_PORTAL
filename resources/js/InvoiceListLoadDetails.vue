@@ -44,49 +44,65 @@
   </script>
   
   <style scoped>
-  .app-container {
-    background-color: #55423d;
-    min-height: 100vh;
-  }
-  
-  .header2 {
-    text-align: center;
-    margin-right: 543px;
-    font-size: 1.4em;
-    color: #fffffe;
-    font-weight: bold;
-  }
-  
-  .invoice-table {
-    width: 60%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    margin-right: 543px;
-    text-align: left;
-  }
-  
-  table, th, td {
-    border: 1px solid #271C19;
-  }
-  
-  th, td {
-    padding: 8px 12px;
-    text-align: left;
-    font-size: 0.9em;
-  }
-  
-  th {
-    background-color: #271C19;
-    color: #fffffe;
-  }
-  
-  tr {
-    background-color: #ffc0ad;
-    color: #271c19;
-    transition: background-color 0.3s ease;
-  }
-  
-  tr:hover {
-    background-color: rgba(255, 192, 173, 0.7);
-  }
+.app-container {
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #55423d;
+  min-height: 100vh;
+}
+
+.header2 {
+  text-align: center;
+  margin-right: 543px;
+  font-size: 1.4em;
+  color: #fffffe;
+  font-weight: bold;
+}
+
+.invoice-table {
+  margin-top: 15px;
+  width: 60%;
+  margin-left: 55px;
+  border-collapse: collapse;
+}
+
+.invoice-table td a {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #9b3c22;
+  color: #ffffff;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  min-width: 85px;
+  transition: background-color 0.2s;
+}
+
+.invoice-table td a:hover {
+  background-color: #d8907d;
+}
+
+table, th, td {
+  border: 1px solid #271C19;
+}
+
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.9em;
+}
+
+th {
+  background-color: #271C19;
+  color: #fffffe;
+}
+
+tr {
+  background-color: #ffc0ad;
+  color: #271c19;
+  transition: background-color 0.3s ease;
+}
+
+tr:hover {
+  background-color: rgba(255, 192, 173, 0.7);
+}
   </style>

@@ -40,13 +40,16 @@
         const commentId = segments[segments.length - 1];
 
         if (commentId) {
-            axios.get(`/get/${loadNumber}/${invoiceNumber}/${commentId}`)
+            axios.get(`/get/${loadNumber}/${invoiceNumber}/${commentId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` } })
             .then(response => {
                 this.comment = { ...response.data};
                 console.log(this.comment);
             })
             .catch(error => {
                 console.error(error);
+                if ((error.response && error.response.status === 401) || (error.response && error.response.status === 500)) {
+                  window.location.href = '/';
+                }
             });
         } else {
             console.error("Comment Id is not available in the URL.");

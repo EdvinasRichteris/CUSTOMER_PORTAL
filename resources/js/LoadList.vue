@@ -1,8 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="header">
-      My Loads
-    </div>
+    <div class="header">My Loads</div>
 
     <table>
       <thead>
@@ -33,8 +31,7 @@
 
 <script>
 import axios from 'axios';
-import { useRouter } from 'vue-router'; 
-
+import { useRouter } from 'vue-router';
 
 export default {
   data() {
@@ -46,16 +43,22 @@ export default {
     this.fetchLoads();
   },
   goToLoadDetails(loadNumber) {
-      this.$router.push({ name: 'LoadDetails', params: { loadNumber } });
-    },
+    this.$router.push({ name: 'LoadDetails', params: { loadNumber } });
+  },
   methods: {
     fetchLoads() {
-      axios.get('/api/loads')
+      const token = localStorage.getItem('access_token');
+
+      axios
+        .get('/api/loads', { headers: { 'Authorization': `Bearer ${token}` } })
         .then(response => {
           this.loads = response.data;
         })
         .catch(error => {
-          console.error(error);
+          console.error("Error fetching loads: ", error);
+          if (error.response && error.response.status === 401) {
+            window.location.href = '/';
+          }
         });
     }
   }
@@ -64,8 +67,25 @@ export default {
 
 <style scoped>
 .app-container {
+  font-family: 'Roboto', Arial, sans-serif;
   background-color: #55423d;
   min-height: 100vh;
+}
+
+td a {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #9b3c22;
+  color: #ffffff;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  min-width: 85px;
+  transition: background-color 0.2s;
+}
+
+td a:hover {
+  background-color: #d8907d;
 }
 
 .header {
@@ -79,7 +99,7 @@ export default {
 
 table {
   width: 90%;
-  margin: 40px auto;
+  margin: 30px auto;
   border-collapse: collapse;
 }
 
@@ -88,7 +108,7 @@ table, th, td {
 }
 
 th, td {
-  padding: 10px 15px;
+  padding: 8px 12px;
   text-align: left;
 }
 
