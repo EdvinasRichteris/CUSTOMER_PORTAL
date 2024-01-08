@@ -1,4 +1,4 @@
-![](./r32azng2.png){width="4.291666666666667in" height="2.4125in"}
+![](./r32azng2.png)
 
 > INFORMATIKOS FAKULTETAS
 >
@@ -107,8 +107,7 @@ prie platformos.
 > Internetinė aplikacija yra pasiekiama per HTTPS protokolą. Šios
 > sistemos veikimui (pvz.,
 >
-> ![](./nf41ew0n.png){width="6.5in"
-> height="3.321527777777778in"}duomenų manipuliavimui su duomenų baze)
+> ![](./nf41ew0n.png)duomenų manipuliavimui su duomenų baze)
 > yra reikalingas CustomerPortal API, kuris pasiekiamas per aplikacijų
 > programavimo sąsają. Pats CustomerPortal API vykdo duomenų mainus su
 > duomenų baze - tam naudojama ORM sąsaja.
@@ -124,63 +123,52 @@ tik parašant URL galutinę dalį, nes domenas, akivaizdu, gali skirtis.
 
 > 3.1.Krovinių API metodai
 >
-> *1* *lentelė.* *Loads* *Get* *(GET)* *specifikacija*
+> _1_ _lentelė._ _Loads_ _Get_ _(GET)_ _specifikacija_
 
-> *2* *lentelė.* *Load* *Get* *(GET)* *specifikacija*
+> _2_ _lentelė._ _Load_ _Get_ _(GET)_ _specifikacija_
 
 > 3.2.Sąskaitų API metodai
 >
-> *3* *lentelė.* *Invoices* *All* *(GET)* *specifikacija*
+> _3_ _lentelė._ _Invoices_ _All_ _(GET)_ _specifikacija_
 
-> *4* *lentelė.* *Invoice* *Get* *(GET)* *specifikacija*
+> _4_ _lentelė._ _Invoice_ _Get_ _(GET)_ _specifikacija_
 
-> *5* *lentelė.* *Invoice* *edit* *(PUT)* *specifikacija*
+> _5_ _lentelė._ _Invoice_ _edit_ _(PUT)_ _specifikacija_
 
-> *6* *lentelė.* *Invoice* *delete* *(DEL)* *specifikacija*
+> _6_ _lentelė._ _Invoice_ _delete_ _(DEL)_ _specifikacija_
 
 > 3.3.Komentarų API metodai
 >
-> *7* *lentelė.* *Comments* *All* *(GET)* *specifikacija*
+> _7_ _lentelė._ _Comments_ _All_ _(GET)_ _specifikacija_
 
-> *8* *lentelė.* *Comment* *edit* *(PUT)* *specifikacija*
+> _8_ _lentelė._ _Comment_ _edit_ _(PUT)_ _specifikacija_
 
-> *9* *lentelė.* *Comment* *delete* *(DEL)* *specifikacija*
+> _9_ _lentelė._ _Comment_ _delete_ _(DEL)_ _specifikacija_
 
 4\. Sistemos naudotojo sąsaja
 
-> ![](./kcc0nigz.png){width="6.5in"
-> height="3.529861111111111in"}**Prezentacinis** **puslapis**
+> ![](./kcc0nigz.png)
 
-![](./efi3baaa.png){width="6.5in" height="3.4902766841644794in"}
+![](./efi3baaa.png)
 
 > **Prisijungimo** **forma**
 >
-> ![](./afkbact5.png){width="6.5in"
-> height="3.5305555555555554in"}**Krovinių** **sąrašas**
+> ![]**Krovinių** **sąrašas**
 >
-> ![](./txj5wegu.png){width="6.5in"
-> height="3.5249989063867018in"}**Krovinio** **informacija**
+> ![](./txj5wegu.png)**Krovinio** **informacija**
 >
-> ![](./gjrdnkoo.png){width="6.5in"
-> height="6.269443350831146in"}**Krovinio** **redagavimo** **modalas**
+> ![]**Krovinio** **redagavimo** **modalas**
 >
-> ![](./anf1womz.png){width="6.5in"
-> height="4.806248906386702in"}**Krovinio** **ištrynimo** **modalas**
+> ![](./anf1womz.png)**Krovinio** **ištrynimo** **modalas**
 >
-> ![](./tynswtgk.png){width="6.5in"
-> height="3.5138877952755907in"}**Sąskaitos** **informacijos/Sąskaitos**
-> **komentarų** **langas**
+> ![](./tynswtgk.png)**Sąskaitos** **informacijos/Sąskaitos** > **komentarų** **langas**
 >
-> ![](./i1adacmy.png){width="6.5in"
-> height="8.305555555555555in"}**Sąskaitos** **redagavimo** **modalas**
+> ![](./i1adacmy.png)**Sąskaitos** **redagavimo** **modalas**
 >
-> ![](./m23j441p.png){width="6.5in"
-> height="4.2965277777777775in"}**Sąskaitos** **ištrinimo** **modalas**
+> ![](./m23j441p.png)**Sąskaitos** **ištrinimo** **modalas**
 
-![](./zf25lm30.png){width="5.620833333333334in"
-height="4.070833333333334in"}
+![](./zf25lm30.png)
 
 > **Komentarų** **redagavimo** **modalas**
 >
-> ![](./emcokr2e.png){width="6.5in" height="3.0in"}**Komentarų**
-> **ištrinimo** **modalas**
+> ![](./emcokr2e.png)**Komentarų** > **ištrinimo** **modalas**
